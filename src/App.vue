@@ -5,12 +5,10 @@
 </template>
 
 <script>
-
+import './assets/css/global.css'
 export default {
   name: "App",
-  components: {
-    
-  }
+  components: {}
 };
 </script>
 
@@ -20,8 +18,7 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
- 
+    background: #2d4d6d;
 }
+
 </style>
