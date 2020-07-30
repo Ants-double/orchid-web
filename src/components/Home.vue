@@ -15,28 +15,47 @@
       </el-header>
       <el-container>
         <el-aside width="200px">
-          <el-menu :default-openeds="['1']">
-            <el-submenu index="1">
-              <template slot="title"
-                ><i class="el-icon-message"></i>导航一</template
-              >
-              <el-menu-item-group>
-                <template slot="title">分组一</template>
-                <el-menu-item index="1-1" @click="oneone">选项1</el-menu-item>
-                <el-menu-item index="1-2">选项2</el-menu-item>
-              </el-menu-item-group>
-              <el-menu-item-group title="分组2">
-                <el-menu-item index="1-3">选项3</el-menu-item>
-              </el-menu-item-group>
-              <el-submenu index="1-4">
-                <template slot="title">选项4</template>
-                <el-menu-item index="1-4-1">选项4-1</el-menu-item>
-              </el-submenu>
-            </el-submenu>
+          <el-menu
+            :default-active="this.$route.path"
+            router
+            mode="horizontal"
+            class="el-menu-vertical-demo"
+            @open="handleOpen"
+            @close="handleClose"
+            background-color="#545c64"
+            text-color="#fff"
+            active-text-color="#ffd04b"
+          >
+            <el-menu-item
+              v-for="(item, i) in navList"
+              :key="i"
+              :index="item.name"
+            >
+              <template slot="title">
+                <i class="el-icon-s-platform"></i>
+                <span> {{ item.navItem }}</span>
+              </template>
+            </el-menu-item>
           </el-menu>
         </el-aside>
         <el-main>
-          <router-view />
+          <el-breadcrumb
+            class="breadcrumb-container"
+            separator-class="el-icon-arrow-right"
+          >
+            <el-breadcrumb-item
+              v-for="(item, index) in levelList"
+              :key="index"
+              :to="{ path: item.path }"
+              >{{ item.meta.title }}</el-breadcrumb-item
+            >
+          </el-breadcrumb>
+          <transition>
+            <keep-alive>
+              <router-view></router-view>
+            </keep-alive>
+          </transition>
+
           <p v-if="msgJson.msgFlog">{{ msgJson.msg }}</p>
         </el-main>
       </el-container>
@@ -52,29 +71,51 @@ export default {
 
   data: function() {
     return {
-      msg: "主题的内空就是在这里显示了。哈哈"
+      msg: "主题的内空就是在这里显示了。哈哈",
+      navList: [
+        { name: "/Home/components/Management", navItem: "权限管理" },
+        { name: "/Home/components/User", navItem: "用户管理" }
+      ],
+      levelList: []
     };
   },
   methods: {
-    oneone:function(){
-      console.log("oneone")
+    oneone: function() {
+      console.log("oneone");
+      this.$router.push({
+        name: "HelloWorld"
+      });
+    },
+    handleOpen(key, keyPath) {
+      console.log(key, keyPath);
+    },
+    handleClose(key, keyPath) {
+      console.log(key, keyPath);
+    },
+    getBreadcrumb() {
+      let matched = this.$route.matched.filter(item => item.name);
+      console.log(matched);
+      const first = matched[0];
+      if (
+        first &&
+        first.name.trim().toLocaleLowerCase() !== "Home".toLocaleLowerCase()
+      ) {
+        matched = [{ path: "/Home", meta: { title: "首页" } }].concat(matched);
+      }
+      this.levelList = matched;
+      console.log(this.levelList);
     }
   },
   watch: {
-    // deep:true,
-    // immediate:true,
-    // // 监测路由变化,只要变化了就调用获取路由参数方法将数据存储本组件即可
-    //   '$route'(to,from){
-    //     console.log(to);
-    //      this.msgJson =this.$route.params.dataobj
-    //     console.log( this.msgJson);
-    //   }
+    $route() {
+      this.getBreadcrumb();
+    }
   },
   created() {
-    //  console.log(this.msgJson)
+    this.getBreadcrumb();
   },
-  components:{
-    HelloWorld
+  components: {
+    mainshow: HelloWorld
   }
 };
 </script>
