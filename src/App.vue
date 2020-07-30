@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <router-view></router-view>
+    <router-view ></router-view>
   </div>
 </template>
 
@@ -8,7 +8,9 @@
 import './assets/css/global.css'
 export default {
   name: "App",
-  components: {}
+  components: {
+    
+  }
 };
 </script>
 
