@@ -5,6 +5,7 @@ import Login from "../components/Login";
 import Home from "../components/Home";
 import User from "../components/User";
 import Management from "../components/Management";
+import TestVuex from "../components/TestVuex"
 Vue.use(Router);
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -53,7 +54,15 @@ export default new Router({
          },
          meta:{title:'用户',icon:'example',noCache:true}
        
-       }
+       },
+       {
+        path: 'components/TestVuex',
+        name: 'TestVuex',
+        components:{
+         default: TestVuex
+        },
+        meta:{title:'测试vuex',icon:'example',noCache:true}
+      }
       ]
     }
   ]
