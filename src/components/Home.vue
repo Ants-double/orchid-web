@@ -74,7 +74,8 @@ export default {
       msg: "主题的内空就是在这里显示了。哈哈",
       navList: [
         { name: "/Home/components/Management", navItem: "权限管理" },
-        { name: "/Home/components/User", navItem: "用户管理" }
+        { name: "/Home/components/User", navItem: "用户管理" },
+         { name: "/Home/components/TestVuex", navItem: "测试VueX" }
       ],
       levelList: []
     };
