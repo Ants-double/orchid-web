@@ -30,6 +30,7 @@
               v-for="(item, i) in navList"
               :key="i"
               :index="item.name"
+              style="width:100%"
             >
               <template slot="title">
                 <i class="el-icon-s-platform"></i>
