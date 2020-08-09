@@ -1,20 +1,7 @@
 <template>
   <div class="home">
     <el-container>
-      <el-header>
-        {{ msg }}
-
-        <el-dropdown class="el-username">
-          <i class="el-icon-setting" style="margin-right: 25px"></i>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>设置</el-dropdown-item>
-            <el-dropdown-item>退出</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-        <span class="username">姓名</span>
-      </el-header>
-      <el-container>
-        <el-aside width="200px">
+      <el-aside width="200px">
           <el-menu
             :default-active="this.$route.path"
             router
@@ -24,13 +11,13 @@
             @close="handleClose"
             background-color="#545c64"
             text-color="#fff"
-            active-text-color="#ffd04b"
+            active-text-color="#409EFF"
           >
             <el-menu-item
               v-for="(item, i) in navList"
               :key="i"
               :index="item.name"
-              style="width:100%"
+              style="text-align:left;width:100%;border-bottom:none !important;"
             >
               <template slot="title">
                 <i class="el-icon-s-platform"></i>
@@ -39,12 +26,27 @@
             </el-menu-item>
           </el-menu>
         </el-aside>
+      
+      <el-container>
+        <el-header>
+          {{ msg }}
+
+          <el-dropdown class="el-username">
+            <i class="el-icon-setting" style="margin-right: 25px"></i>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item>设置</el-dropdown-item>
+              <el-dropdown-item>退出</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+          <span class="username">姓名</span>
+        </el-header>
         <el-main>
           <el-breadcrumb
             class="breadcrumb-container"
             separator-class="el-icon-arrow-right"
           >
             <el-breadcrumb-item
+              style="margin-bottom: 20px;"
               v-for="(item, index) in levelList"
               :key="index"
               :to="{ path: item.path }"
