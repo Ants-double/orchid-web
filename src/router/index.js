@@ -1,11 +1,9 @@
 import Vue from "vue";
 import Router from "vue-router";
+import {routers} from "./routers";
 import HelloWorld from "@/components/HelloWorld";
-import Login from "../components/Login";
-import Home from "../components/Home";
-import User from "../components/User";
-import Management from "../components/Management";
-import TestVuex from "../components/TestVuex"
+import Login from "@/components/Login";
+import Home from "@/components/Home";
 Vue.use(Router);
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -13,7 +11,7 @@ Router.prototype.push = function push(location) {
 }
 
 export default new Router({
-  mode: "history",
+  // mode: "history",
   routes: [
     {
       path: "/hello",
@@ -35,35 +33,7 @@ export default new Router({
       component: Home,
       props: { msgJson: { msg: "头部传参", msgFlog: true } },
       meta:{title:'首页',icon:'example',noCache:true},
-      children:[
-        
-        {
-         path: 'components/Management',
-         name: 'Management',
-         components:{
-           default: Management
-         },
-         meta:{title:'权限管理',icon:'example',noCache:true}
-        
-       },
-        {
-         path: 'components/User',
-         name: 'User',
-         components:{
-          default: User
-         },
-         meta:{title:'用户',icon:'example',noCache:true}
-       
-       },
-       {
-        path: 'components/TestVuex',
-        name: 'TestVuex',
-        components:{
-         default: TestVuex
-        },
-        meta:{title:'测试vuex',icon:'example',noCache:true}
-      }
-      ]
+      children:routers
     }
   ]
 });

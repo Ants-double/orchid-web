@@ -30,10 +30,11 @@
               v-for="(item, i) in navList"
               :key="i"
               :index="item.name"
+              style="width:100%"
             >
               <template slot="title">
                 <i class="el-icon-s-platform"></i>
-                <span> {{ item.navItem }}</span>
+                <span> {{ item.meta.title }}</span>
               </template>
             </el-menu-item>
           </el-menu>
@@ -65,6 +66,8 @@
 
 <script>
 import HelloWorld from "../components/HelloWorld";
+import {routers} from "@/router/routers";
+
 export default {
   props: ["msgJson", "author"],
   name: "Home",
@@ -72,12 +75,12 @@ export default {
   data: function() {
     return {
       msg: "主题的内空就是在这里显示了。哈哈",
-      navList: [
-        { name: "/Home/components/Management", navItem: "权限管理" },
-        { name: "/Home/components/User", navItem: "用户管理" }
-      ],
+      navList:routers,
       levelList: []
     };
+  },
+  mounted(){
+    console.log(this.$route,233333)
   },
   methods: {
     oneone: function() {

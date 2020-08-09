@@ -44,6 +44,9 @@ export default {
           }]
         }
       },
+      mounted(){
+        console.log(23333)
+      },
       computed:{
         ...mapState(['userList'])
       },
