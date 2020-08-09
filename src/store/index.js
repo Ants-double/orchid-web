@@ -6,6 +6,7 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
   state: {
    userList:{},
+   tabsInfo:{}
   },
   mutations: {
     // 更新用户列表信息
