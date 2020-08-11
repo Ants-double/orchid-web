@@ -17,6 +17,7 @@
               v-for="(item, i) in navList"
               :key="i"
               :index="item.name"
+              @click="addTabs(item)"
               style="text-align:left;width:100%;border-bottom:none !important;"
             >
               <template slot="title">
@@ -26,7 +27,7 @@
             </el-menu-item>
           </el-menu>
         </el-aside>
-      
+
       <el-container>
         <el-header>
           {{ msg }}
@@ -69,6 +70,7 @@
 <script>
 import HelloWorld from "../components/HelloWorld";
 import {routers} from "@/router/routers";
+import {mapState} from 'vuex'
 
 export default {
   props: ["msgJson", "author"],
@@ -81,8 +83,8 @@ export default {
       levelList: []
     };
   },
-  mounted(){
-    console.log(this.$route,233333)
+  computed:{
+    ...mapState(['tabsInfo'])
   },
   methods: {
     oneone: function() {
@@ -99,7 +101,6 @@ export default {
     },
     getBreadcrumb() {
       let matched = this.$route.matched.filter(item => item.name);
-      console.log(matched);
       const first = matched[0];
       if (
         first &&
@@ -108,7 +109,42 @@ export default {
         matched = [{ path: "/Home", meta: { title: "首页" } }].concat(matched);
       }
       this.levelList = matched;
-      console.log(this.levelList);
+    },
+    addTabs(item){
+      //去重
+      let editableTabsValue = this.tabsInfo.editableTabsValue+''
+      let tabIndex = this.tabsInfo.tabIndex
+      let info =  this.tabsInfo.editableTabs
+      if (!editableTabsValue.length){
+        info.push({
+          title:item.meta.title,
+          name:item.meta.title,
+        })
+        tabIndex++;
+        editableTabsValue++;
+      }else{
+        //检查是不是重复
+        let title = item.meta.title
+        let notUnique = info.some(function(val){
+          return val.title == title;
+        })
+        if (!notUnique){
+          info.push({
+            title:title,
+            name:title,
+          })
+          tabIndex++;
+          editableTabsValue++;
+        }
+      }
+
+      let all = {
+        editableTabsValue:editableTabsValue,
+        editableTabs:info,
+        tabIndex:tabIndex
+      }
+      this.$store.commit("UpdateTabList",all)
+      console.log(this.tabsInfo)
     }
   },
   watch: {
