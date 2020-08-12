@@ -42,23 +42,34 @@
           <span class="username">姓名</span>
         </el-header>
         <el-main>
-          <el-breadcrumb
-            class="breadcrumb-container"
-            separator-class="el-icon-arrow-right"
-          >
-            <el-breadcrumb-item
-              style="margin-bottom: 20px;"
-              v-for="(item, index) in levelList"
-              :key="index"
-              :to="{ path: item.path }"
-              >{{ item.meta.title }}</el-breadcrumb-item
+          <el-tabs v-model="tabsInfo.editableTabsValue" type="card" editable @edit="handleTabsEdit">
+            <el-tab-pane
+              :key="item.name"
+              v-for="(item, index) in tabsInfo.editableTabs"
+              :label="item.title"
+              :name="item.name"
             >
-          </el-breadcrumb>
-          <transition>
-            <keep-alive>
-              <router-view></router-view>
-            </keep-alive>
-          </transition>
+              <component :is="item.componentName"></component>
+<!--              <router-view></router-view>-->
+            </el-tab-pane>
+          </el-tabs>
+<!--          <el-breadcrumb-->
+<!--            class="breadcrumb-container"-->
+<!--            separator-class="el-icon-arrow-right"-->
+<!--          >-->
+<!--            <el-breadcrumb-item-->
+<!--              style="margin-bottom: 20px;"-->
+<!--              v-for="(item, index) in levelList"-->
+<!--              :key="index"-->
+<!--              :to="{ path: item.path }"-->
+<!--              >{{ item.meta.title }}</el-breadcrumb-item-->
+<!--            >-->
+<!--          </el-breadcrumb>-->
+<!--          <transition>-->
+<!--            <keep-alive>-->
+<!--              <router-view></router-view>-->
+<!--            </keep-alive>-->
+<!--          </transition>-->
 
           <p v-if="msgJson.msgFlog">{{ msgJson.msg }}</p>
         </el-main>
@@ -111,6 +122,9 @@ export default {
       this.levelList = matched;
     },
     addTabs(item){
+      if (item.meta.title == '首页'){
+        return 
+      }
       //去重
       let editableTabsValue = this.tabsInfo.editableTabsValue+''
       let tabIndex = this.tabsInfo.tabIndex
@@ -119,6 +133,7 @@ export default {
         info.push({
           title:item.meta.title,
           name:item.meta.title,
+          componentName: item.component
         })
         tabIndex++;
         editableTabsValue++;
@@ -132,6 +147,7 @@ export default {
           info.push({
             title:title,
             name:title,
+            componentName: item.component
           })
           tabIndex++;
           editableTabsValue++;
@@ -139,13 +155,21 @@ export default {
       }
 
       let all = {
-        editableTabsValue:editableTabsValue,
+        editableTabsValue:editableTabsValue+'',
         editableTabs:info,
-        tabIndex:tabIndex
+        tabIndex:tabIndex+''
       }
       this.$store.commit("UpdateTabList",all)
-      console.log(this.tabsInfo)
-    }
+      console.log(this.tabsInfo.editableTabs)
+    },
+    handleTabsEdit(targetName, action) {
+      if (action === 'add') {
+        console.log(2333)
+      }
+      if (action === 'remove') {
+        console.log(11111111111111)
+        }
+      }
   },
   watch: {
     $route() {
