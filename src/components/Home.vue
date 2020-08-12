@@ -42,7 +42,9 @@
           <span class="username">姓名</span>
         </el-header>
         <el-main>
-          <el-tabs v-model="tabsInfo.editableTabsValue" type="card" editable @edit="handleTabsEdit">
+          <el-tabs v-model="tabsInfo.editableTabsValue"
+                   type="card"
+                   closable @tab-remove="removeTab">
             <el-tab-pane
               :key="item.name"
               v-for="(item, index) in tabsInfo.editableTabs"
@@ -162,14 +164,8 @@ export default {
       this.$store.commit("UpdateTabList",all)
       console.log(this.tabsInfo.editableTabs)
     },
-    handleTabsEdit(targetName, action) {
-      if (action === 'add') {
-        console.log(2333)
-      }
-      if (action === 'remove') {
-        console.log(11111111111111)
-        }
-      }
+    removeTab(targetName) {
+    }
   },
   watch: {
     $route() {
