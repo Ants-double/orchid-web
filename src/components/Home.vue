@@ -123,7 +123,7 @@ export default {
     },
     addTabs(item){
       if (item.meta.title == '首页'){
-        return 
+        return
       }
       //去重
       let editableTabsValue = this.tabsInfo.editableTabsValue+''
