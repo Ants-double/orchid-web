@@ -29,7 +29,7 @@
         </el-aside>
 
       <el-container>
-        <el-header>
+        <el-header height="40">
           {{ msg }}
 
           <el-dropdown class="el-username">
@@ -41,7 +41,7 @@
           </el-dropdown>
           <span class="username">姓名</span>
         </el-header>
-        <el-main>
+        <el-main style="padding:0px">
           <el-tabs v-model="editableTabsValue"
                    type="card"
                    closable @tab-remove="removeTab">
@@ -50,22 +50,22 @@
               :key="item.name"
               :label="item.title"
               :name="item.name"
-            >
+            >   
+                         <el-breadcrumb
+           class="breadcrumb-container"
+           separator-class="el-icon-arrow-right"
+         >
+                <el-breadcrumb-item
+                  style="margin-bottom: 20px;"
+                  v-for="(item, index) in levelList"
+                  :key="index"
+                  :to="{ path: item.path }"
+                  >{{ item.meta.title }}</el-breadcrumb-item
+                >
+                </el-breadcrumb>
                 <component :is="item.componentName"></component>
             </el-tab-pane>
           </el-tabs>
-<!--          <el-breadcrumb-->
-<!--            class="breadcrumb-container"-->
-<!--            separator-class="el-icon-arrow-right"-->
-<!--          >-->
-<!--            <el-breadcrumb-item-->
-<!--              style="margin-bottom: 20px;"-->
-<!--              v-for="(item, index) in levelList"-->
-<!--              :key="index"-->
-<!--              :to="{ path: item.path }"-->
-<!--              >{{ item.meta.title }}</el-breadcrumb-item-->
-<!--            >-->
-<!--          </el-breadcrumb>-->
 <!--          <transition>-->
 <!--            <keep-alive>-->
 <!--              <router-view></router-view>-->
@@ -171,20 +171,6 @@ export default {
     if (route[0]){
       this.changeTabs(route[0])
     }
-    //匹配对应的routers的value
-    // let title = item.meta.title
-    // let notUnique = false
-    // notUnique  = this.editableTabs.some(function(val){
-    //   return val.title == title;
-    // })
-    // this.editableTabsValue = item.name;
-    // if (!notUnique){
-    //   this.editableTabs.push({
-    //     title:title,
-    //     name:this.editableTabsValue,
-    //     componentName: item.component
-    //   })
-    // }
   },
   watch: {
     $route() {
@@ -199,16 +185,16 @@ export default {
   }
 };
 </script>
-<style>
+<style >
 .el-header {
-  background-color: #b3c0d1;
+  background-color: #fff;
   color: #333;
   position: relative;
   text-align: center;
-  line-height: 60px;
+  line-height: 40px;
   font-weight: bold;
   font-size: 26px;
-  height: 60px;
+  height: 40px;
 }
 
 .el-username {
@@ -245,5 +231,25 @@ export default {
 }
 .home {
   height: 100%;
+}
+.is-top{
+  background:#fff;
+}
+.el-tabs__content{
+  margin-top: 20px;
+  margin-left: 20px;
+  width: 98%;
+}
+.el-tabs--card>.el-tabs__header .el-tabs__nav{
+  border: none;
+}
+.el-tabs--card>.el-tabs__header .el-tabs__item:first-child {
+    border-left: 1px solid rgb(228, 231, 237);
+    margin-left: 20px;
+}
+.el-tabs__nav div{
+  margin-left: 10px;
+  border: 1px solid rgb(228, 231, 237) !important;
+  margin-bottom: 3px;
 }
 </style>
