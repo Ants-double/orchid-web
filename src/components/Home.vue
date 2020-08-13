@@ -42,36 +42,37 @@
           <span class="username">姓名</span>
         </el-header>
         <el-main>
-          <el-tabs v-model="tabsInfo.editableTabsValue"
-                   type="card"
-                   closable @tab-remove="removeTab">
-            <el-tab-pane
-              :key="item.name"
-              v-for="(item, index) in tabsInfo.editableTabs"
-              :label="item.title"
-              :name="item.name"
-            >
-              <component :is="item.componentName"></component>
-<!--              <router-view></router-view>-->
-            </el-tab-pane>
-          </el-tabs>
-<!--          <el-breadcrumb-->
-<!--            class="breadcrumb-container"-->
-<!--            separator-class="el-icon-arrow-right"-->
-<!--          >-->
-<!--            <el-breadcrumb-item-->
-<!--              style="margin-bottom: 20px;"-->
-<!--              v-for="(item, index) in levelList"-->
-<!--              :key="index"-->
-<!--              :to="{ path: item.path }"-->
-<!--              >{{ item.meta.title }}</el-breadcrumb-item-->
+<!--          <el-tabs v-model="tabsInfo.editableTabsValue"-->
+<!--                   type="card"-->
+<!--                   closable @tab-remove="removeTab">-->
+<!--            <el-tab-pane-->
+<!--              v-for="(item, index) in tabsInfo.editableTabs"-->
+<!--              :key="item.name"-->
+<!--              :label="item.title"-->
+<!--              :name="item.name"-->
 <!--            >-->
-<!--          </el-breadcrumb>-->
-<!--          <transition>-->
-<!--            <keep-alive>-->
-<!--              <router-view></router-view>-->
-<!--            </keep-alive>-->
-<!--          </transition>-->
+<!--              <keep-alive>-->
+<!--                <component :is="item.componentName"></component>-->
+<!--              </keep-alive>-->
+<!--            </el-tab-pane>-->
+<!--          </el-tabs>-->
+          <el-breadcrumb
+            class="breadcrumb-container"
+            separator-class="el-icon-arrow-right"
+          >
+            <el-breadcrumb-item
+              style="margin-bottom: 20px;"
+              v-for="(item, index) in levelList"
+              :key="index"
+              :to="{ path: item.path }"
+              >{{ item.meta.title }}</el-breadcrumb-item
+            >
+          </el-breadcrumb>
+          <transition>
+            <keep-alive>
+              <router-view></router-view>
+            </keep-alive>
+          </transition>
 
           <p v-if="msgJson.msgFlog">{{ msgJson.msg }}</p>
         </el-main>
