@@ -126,6 +126,9 @@ export default {
     },
     //切换tab 不过既然一直都在这个页面可以考虑不用vuex保存数据
     changeTabs(item){
+      if (item.meta.title == '首页'){
+        return
+      }
       //检查是不是重复
       let title = item.meta.title
       let notUnique = false
@@ -160,7 +163,28 @@ export default {
     },
   },
   mounted() {//刷新时根据当前路由，生成tab
-
+    console.log(this.$route)
+    let name = this.$route.name
+    let route = routers.filter(item=>{
+      return item.name == name
+    })
+    if (route[0]){
+      this.changeTabs(route[0])
+    }
+    //匹配对应的routers的value
+    // let title = item.meta.title
+    // let notUnique = false
+    // notUnique  = this.editableTabs.some(function(val){
+    //   return val.title == title;
+    // })
+    // this.editableTabsValue = item.name;
+    // if (!notUnique){
+    //   this.editableTabs.push({
+    //     title:title,
+    //     name:this.editableTabsValue,
+    //     componentName: item.component
+    //   })
+    // }
   },
   watch: {
     $route() {
