@@ -17,7 +17,7 @@
               v-for="(item, i) in navList"
               :key="i"
               :index="item.name"
-              @click="addTabs(item)"
+              @click="changeTabs(item)"
               style="text-align:left;width:100%;border-bottom:none !important;"
             >
               <template slot="title">
@@ -42,39 +42,37 @@
           <span class="username">姓名</span>
         </el-header>
         <el-main>
-<!--          <el-tabs v-model="tabsInfo.editableTabsValue"-->
-<!--                   type="card"-->
-<!--                   closable @tab-remove="removeTab">-->
-<!--            <el-tab-pane-->
-<!--              v-for="(item, index) in tabsInfo.editableTabs"-->
-<!--              :key="item.name"-->
-<!--              :label="item.title"-->
-<!--              :name="item.name"-->
-<!--            >-->
-<!--              <keep-alive>-->
-<!--                <component :is="item.componentName"></component>-->
-<!--              </keep-alive>-->
-<!--            </el-tab-pane>-->
-<!--          </el-tabs>-->
-          <el-breadcrumb
-            class="breadcrumb-container"
-            separator-class="el-icon-arrow-right"
-          >
-            <el-breadcrumb-item
-              style="margin-bottom: 20px;"
-              v-for="(item, index) in levelList"
-              :key="index"
-              :to="{ path: item.path }"
-              >{{ item.meta.title }}</el-breadcrumb-item
+          <el-tabs v-model="editableTabsValue"
+                   type="card"
+                   closable @tab-remove="removeTab">
+            <el-tab-pane
+              v-for="(item, index) in editableTabs"
+              :key="item.name"
+              :label="item.title"
+              :name="item.name"
             >
-          </el-breadcrumb>
-          <transition>
-            <keep-alive>
-              <router-view></router-view>
-            </keep-alive>
-          </transition>
+                <component :is="item.componentName"></component>
+            </el-tab-pane>
+          </el-tabs>
+<!--          <el-breadcrumb-->
+<!--            class="breadcrumb-container"-->
+<!--            separator-class="el-icon-arrow-right"-->
+<!--          >-->
+<!--            <el-breadcrumb-item-->
+<!--              style="margin-bottom: 20px;"-->
+<!--              v-for="(item, index) in levelList"-->
+<!--              :key="index"-->
+<!--              :to="{ path: item.path }"-->
+<!--              >{{ item.meta.title }}</el-breadcrumb-item-->
+<!--            >-->
+<!--          </el-breadcrumb>-->
+<!--          <transition>-->
+<!--            <keep-alive>-->
+<!--              <router-view></router-view>-->
+<!--            </keep-alive>-->
+<!--          </transition>-->
 
-          <p v-if="msgJson.msgFlog">{{ msgJson.msg }}</p>
+<!--          <p v-if="msgJson.msgFlog">{{ msgJson.msg }}</p>-->
         </el-main>
       </el-container>
     </el-container>
@@ -94,7 +92,9 @@ export default {
     return {
       msg: "主题的内空就是在这里显示了。哈哈",
       navList:routers,
-      levelList: []
+      levelList: [],
+      editableTabsValue: '',
+      editableTabs: [],
     };
   },
   computed:{
@@ -124,49 +124,43 @@ export default {
       }
       this.levelList = matched;
     },
-    addTabs(item){
-      if (item.meta.title == '首页'){
-        return
-      }
-      //去重
-      let editableTabsValue = this.tabsInfo.editableTabsValue+''
-      let tabIndex = this.tabsInfo.tabIndex
-      let info =  this.tabsInfo.editableTabs
-      if (!editableTabsValue.length){
-        info.push({
-          title:item.meta.title,
-          name:item.meta.title,
+    //切换tab 不过既然一直都在这个页面可以考虑不用vuex保存数据
+    changeTabs(item){
+      //检查是不是重复
+      let title = item.meta.title
+      let notUnique = false
+      notUnique  = this.editableTabs.some(function(val){
+        return val.title == title;
+      })
+      this.editableTabsValue = item.name;
+      if (!notUnique){
+        this.editableTabs.push({
+          title:title,
+          name:this.editableTabsValue,
           componentName: item.component
         })
-        tabIndex++;
-        editableTabsValue++;
-      }else{
-        //检查是不是重复
-        let title = item.meta.title
-        let notUnique = info.some(function(val){
-          return val.title == title;
-        })
-        if (!notUnique){
-          info.push({
-            title:title,
-            name:title,
-            componentName: item.component
-          })
-          tabIndex++;
-          editableTabsValue++;
-        }
       }
-
-      let all = {
-        editableTabsValue:editableTabsValue+'',
-        editableTabs:info,
-        tabIndex:tabIndex+''
-      }
-      this.$store.commit("UpdateTabList",all)
-      console.log(this.tabsInfo.editableTabs)
     },
     removeTab(targetName) {
-    }
+      let tabs = this.editableTabs;
+      let activeName = this.editableTabsValue;
+      if (activeName === targetName) {
+        tabs.forEach((tab, index) => {
+          if (tab.name === targetName) {
+            let nextTab = tabs[index + 1] || tabs[index - 1];
+            if (nextTab) {
+              activeName = nextTab.name;
+            }
+          }
+        });
+      }
+
+      this.editableTabsValue = activeName;
+      this.editableTabs = tabs.filter(tab => tab.name !== targetName);
+    },
+  },
+  mounted() {//刷新时根据当前路由，生成tab
+
   },
   watch: {
     $route() {
