@@ -44,13 +44,15 @@
         <el-main style="padding:0px">
           <el-tabs v-model="editableTabsValue"
                    type="card"
-                   closable @tab-remove="removeTab">
+                   closable @tab-remove="removeTab"
+                   @tab-click="tabClick"
+          >
             <el-tab-pane
               v-for="(item, index) in editableTabs"
               :key="item.name"
               :label="item.title"
               :name="item.name"
-            >   
+            >
                          <el-breadcrumb
            class="breadcrumb-container"
            separator-class="el-icon-arrow-right"
@@ -81,6 +83,8 @@
 
 <script>
 import HelloWorld from "../components/HelloWorld";
+import http from '@/config/http'
+import api from '@/config/request'
 import {routers} from "@/router/routers";
 import {mapState} from 'vuex'
 
@@ -116,6 +120,7 @@ export default {
     getBreadcrumb() {
       let matched = this.$route.matched.filter(item => item.name);
       const first = matched[0];
+      console.log(first)
       if (
         first &&
         first.name.trim().toLocaleLowerCase() !== "Home".toLocaleLowerCase()
@@ -144,6 +149,15 @@ export default {
         })
       }
     },
+    tabClick(e){
+      console.log(e)
+      let matched = []
+      if (e.label != '首页'){
+        matched = [{ path: e.name, meta: { title: e.label } }];
+        matched = [{ path: "/Home", meta: { title: "首页" } }].concat(matched);
+      }
+      this.levelList = matched;
+    },
     removeTab(targetName) {
       let tabs = this.editableTabs;
       let activeName = this.editableTabsValue;
@@ -163,7 +177,6 @@ export default {
     },
   },
   mounted() {//刷新时根据当前路由，生成tab
-    console.log(this.$route)
     let name = this.$route.name
     let route = routers.filter(item=>{
       return item.name == name
@@ -178,6 +191,7 @@ export default {
     }
   },
   created() {
+    console.log()
     this.getBreadcrumb();
   },
   components: {
