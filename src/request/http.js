@@ -1,4 +1,6 @@
 import axios from 'axios';
+import QS from 'qs';
+import { Loading, Message } from 'element-ui'
 
 //创建axios实例
 const service = axios.create({
@@ -9,16 +11,22 @@ const service = axios.create({
 service.interceptors.request.use(config => {
     return config;
 }, error => {
+    //之后如果没token就跳到登录
     Promise.reject(error);
 })
 
 //添加response拦截器
 service.interceptors.response.use(
     response => {
-        let res = {};
-        res.status = response.status;
-        res.data = response.data;
-        return res;
+        if (response.status == 200){
+          console.log(response)
+          let res = {};
+          res.status = response.status;
+          res.data = response.data;
+          return res;
+        }else{//如果不是200 给出提示
+
+        }
     },
     error => {
         if (error.response && error.response.status == 404) {

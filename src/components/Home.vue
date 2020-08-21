@@ -83,8 +83,6 @@
 
 <script>
 import HelloWorld from "../components/HelloWorld";
-import http from '@/config/http'
-import api from '@/config/request'
 import {routers} from "@/router/routers";
 import {mapState} from 'vuex'
 
